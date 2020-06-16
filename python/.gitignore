@@ -1,0 +1,11 @@
+build/
+dist/
+*egg-info
+__pycache__
+
+# This is written by dev_tools/write_version.py
+minknow_api/_version.py
+
+# Common virtualenvironment names
+venv/
+.venv/

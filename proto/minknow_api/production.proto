@@ -1,0 +1,194 @@
+// WARNING: This file is generated from production.proto.mako
+
+syntax="proto3";
+
+package minknow_api.production;
+
+option java_package = "com.nanoporetech.minknow_api";
+option objc_class_prefix = "MKAPI";
+
+
+// Methods used in production.
+//
+// These might modify the device or flowcell permanently. They are not available
+// in non-production contexts.
+service ProductionService {
+    // Writes data to the EEPROM on the attached flowcell.
+    //
+    // This call will fail with FAILED_PRECONDITION if there is no device connected or no flowcell
+    // attached.
+    //
+    // Very little checking of the provided values is done, and no attempt is made to preserve
+    // existing data. Use the other methods on this service for that.
+    rpc write_flowcell_data(WriteFlowcellDataRequest) returns (WriteFlowcellDataResponse) {}
+
+    // Write the flowcell ID to the flowcell EEPROM.
+    //
+    // Flowcell IDs over 8 characters or containing unprintable characters will be rejected with
+    // INVALID_ARGUMENT. An empty string effectively clears the flowcell ID.
+    //
+    // If nothing is currently written on the flowcell EEPROM, it will write the data in a suitable
+    // format. If the EEPROM contains a data version that supports this field, it will be updated,
+    // and all other fields will be preserved. If the EEPROM contains a data version that doesn't
+    // support this field, this call will fail with FAILED_PRECONDITION and the EEPROM will not be
+    // changed.
+    //
+    // This call will fail with FAILED_PRECONDITION if there is no device connected or no flowcell
+    // attached, or if the flowcell's EEPROM is corrupt or has data in an unknown version.
+    rpc write_flowcell_id(WriteFlowcellIdRequest) returns (WriteFlowcellIdResponse) {}
+
+    // Write the number of wells to the flowcell EEPROM.
+    //
+    // Well counts greater than the number supported by the hardware will be rejected. Passing zero
+    // will effectively set it to the default for this device.
+    //
+    // If nothing is currently written on the flowcell EEPROM, it will write the data in a suitable
+    // format. If the EEPROM contains a data version that supports this field, it will be updated,
+    // and all other fields will be preserved. If the EEPROM contains a data version that doesn't
+    // support this field, this call will fail with FAILED_PRECONDITION and the EEPROM will not be
+    // changed.
+    //
+    // This call will fail with FAILED_PRECONDITION if there is no device connected or no flowcell
+    // attached, or if the flowcell's EEPROM is corrupt or has data in an unknown version.
+    rpc write_wells_per_channel(WriteWellsPerChannelRequest) returns (WriteWellsPerChannelResponse) {}
+
+    // Write the product code to the flowcell EEPROM.
+    //
+    // This is the code presented to customers in the shop, eg: "FLO-MIN106".
+    //
+    // Produce codes over 10 characters or containing unprintable characters will be rejected with
+    // INVALID_ARGUMENT. An empty string effectively clears the product code.
+    //
+    // If nothing is currently written on the flowcell EEPROM, it will write the data in a suitable
+    // format. If the EEPROM contains a data version that supports this field, it will be updated,
+    // and all other fields will be preserved. If the EEPROM contains a data version that doesn't
+    // support this field, this call will fail with FAILED_PRECONDITION and the EEPROM will not be
+    // changed.
+    //
+    // This call will fail with FAILED_PRECONDITION if there is no device connected or no flowcell
+    // attached, or if the flowcell's EEPROM is corrupt or has data in an unknown version.
+    rpc write_product_code(WriteProductCodeRequest) returns (WriteProductCodeResponse) {}
+
+    // Write the temperature offset to the flowcell EEPROM.
+    //
+    // The temperature offset is specified in hundreths of a degree Celsius, and can range from
+    // -327.67 degrees Celsius to 327.67 degrees Celsius. The value -32767 will be accepted, but
+    // will cause the temperature offset to cleared, just as though no value had been provided at
+    // all.
+    //
+    // If nothing is currently written on the flowcell EEPROM, it will write the data in a suitable
+    // format. If the EEPROM contains a data version that supports this field, it will be updated,
+    // and all other fields will be preserved. If the EEPROM contains a data version that doesn't
+    // support this field, this call will fail with FAILED_PRECONDITION and the EEPROM will not be
+    // changed.
+    //
+    // This call will fail with FAILED_PRECONDITION if there is no device connected or no flowcell
+    // attached, or if the flowcell's EEPROM is corrupt or has data in an unknown version.
+    rpc write_temperature_offset(WriteTemperatureOffsetRequest) returns (WriteTemperatureOffsetResponse) {}
+}
+
+message WriteFlowcellDataRequest {
+    message Empty {}
+    message Version1 {
+        // Flowcell ID (same as barcode on flowcell, ascii encoded)
+        string flowcell_id = 1;
+    }
+    message Version2 {
+        // Number of wells per channel
+        uint32 wells_per_channel = 1;
+        // Flowcell ID (same as barcode on flowcell, ascii encoded)
+        string flowcell_id = 2;
+    }
+    message Version3 {
+        // Minor version (supports backwards compatibility)
+        uint32 minor_version = 1;
+        // Number of wells per channel
+        uint32 wells_per_channel = 2;
+        // Used to make the field nullable, since the null value is not protobuf's default.
+        oneof temperature_offset_nullable {
+        // Correction to be applied to ASIC temperature as a multiple of 0.01 degrees Celsius. If multiple temperatures are available, applies to the mean temperature.
+        sint32 temperature_offset = 3;
+        }
+        // Flowcell ID (same as barcode on flowcell, ascii encoded)
+        string flowcell_id = 4;
+        // Product code (part number) for flowcell, as displayed in customer store (ascii encoded)
+        string product_code = 5;
+    }
+    message Version4 {
+        // Minor version (supports backwards compatibility)
+        uint32 minor_version = 1;
+        // Used to make the field nullable, since the null value is not protobuf's default.
+        oneof temperature_offset_nullable {
+        // Correction to be applied to ASIC temperature as a multiple of 0.01 degrees Celsius. If multiple temperatures are available, applies to the mean temperature.
+        sint32 temperature_offset = 2;
+        }
+        // Flongle adapter ID (same as barcode on adapter, ascii encoded)
+        string adapter_id = 3;
+    }
+    message Version5 {
+        // Minor version (supports backwards compatibility)
+        uint32 minor_version = 1;
+        // Number of wells per channel
+        uint32 wells_per_channel = 2;
+        // Used to make the field nullable, since the null value is not protobuf's default.
+        oneof temperature_offset_nullable {
+        // Correction to be applied to ASIC temperature as a multiple of 0.01 degrees Celsius. If multiple temperatures are available, applies to the mean temperature.
+        sint32 temperature_offset = 3;
+        }
+        // Flowcell ID (same as barcode on flowcell, ascii encoded)
+        string flowcell_id = 4;
+        // Product code (part number) for flowcell, as displayed in customer store (ascii encoded)
+        string product_code = 5;
+    }
+    message Version6 {
+        // Minor version (supports backwards compatibility)
+        uint32 minor_version = 1;
+        // Used to make the field nullable, since the null value is not protobuf's default.
+        oneof temperature_offset_nullable {
+        // Correction to be applied to ASIC temperature as a multiple of 0.01 degrees Celsius. If multiple temperatures are available, applies to the mean temperature.
+        sint32 temperature_offset = 2;
+        }
+        // Flongle adapter ID (same as barcode on adapter, ascii encoded)
+        string adapter_id = 3;
+    }
+
+    oneof data {
+        // Clears any existing data from the EEPROM.
+        Empty empty = 1;
+        // Writes version 1 data to the EEPROM.
+        Version1 v1 = 2;
+        // Writes version 2 data to the EEPROM.
+        Version2 v2 = 3;
+        // Writes version 3 data to the EEPROM.
+        Version3 v3 = 4;
+        // Writes version 4 data to the EEPROM.
+        Version4 v4 = 5;
+        // Writes version 5 data to the EEPROM.
+        Version5 v5 = 6;
+        // Writes version 6 data to the EEPROM.
+        Version6 v6 = 7;
+    };
+}
+message WriteFlowcellDataResponse {}
+
+message WriteFlowcellIdRequest {
+    string flowcell_id = 1;
+}
+message WriteFlowcellIdResponse {}
+
+message WriteWellsPerChannelRequest {
+    uint32 wells_per_channel = 1;
+}
+message WriteWellsPerChannelResponse {}
+
+message WriteProductCodeRequest {
+    string product_code = 1;
+}
+message WriteProductCodeResponse {}
+
+message WriteTemperatureOffsetRequest {
+    oneof offset_nullable {
+        int32 offset = 1;
+    }
+}
+message WriteTemperatureOffsetResponse {}
