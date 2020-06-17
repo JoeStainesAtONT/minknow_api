@@ -4,12 +4,13 @@ python:
 
 install:
     - pip install -r dev-requirements.txt
-    - pip install python/
+    - cd python
+    - pip install .
 
 script:
     - pytest ./python/test/example_tests/*
 
 deploy:
     provider: pypi
-    user: __token__
+    user: "__token__"
     password: "pypi-AgEIcHlwaS5vcmcCJDkxMjFmNzk1LTUyYmMtNDk1YS04MGU5LTBiZDhkODNkZTU2OQACJXsicGVybWlzc2lvbnMiOiAidXNlciIsICJ2ZXJzaW9uIjogMX0AAAYgsjXpUVjf32eRUmIOedkjT8Dtr-SFPj_vJazjYuCp_Qc"
