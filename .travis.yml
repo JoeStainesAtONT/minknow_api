@@ -10,3 +10,9 @@ install:
 
 script:
     - pytest ./python/test/example_tests/*
+
+deploy:
+    provider: pypi
+    server: https://test.pypi.org/legacy/
+    user: __token__
+    password: "pypi-AgEIcHlwaS5vcmcCJDkxMjFmNzk1LTUyYmMtNDk1YS04MGU5LTBiZDhkODNkZTU2OQACJXsicGVybWlzc2lvbnMiOiAidXNlciIsICJ2ZXJzaW9uIjogMX0AAAYgsjXpUVjf32eRUmIOedkjT8Dtr-SFPj_vJazjYuCp_Qc"
