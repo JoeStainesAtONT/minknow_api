@@ -1,16 +1,14 @@
 language: python
 python:
-    - "3.6"
-
+- '3.6'
 install:
-    - pip install -r dev-requirements.txt
-    - cd python
-    - pip install .
-
+- pip install -r dev-requirements.txt
+- cd python
+- pip install .
 script:
-    - pytest ./test/example_tests/*
-
+- pytest ./test/example_tests/*
 deploy:
-    provider: pypi
-    user: "__token__"
-    password: "pypi-AgEIcHlwaS5vcmcCJDkxMjFmNzk1LTUyYmMtNDk1YS04MGU5LTBiZDhkODNkZTU2OQACJXsicGVybWlzc2lvbnMiOiAidXNlciIsICJ2ZXJzaW9uIjogMX0AAAYgsjXpUVjf32eRUmIOedkjT8Dtr-SFPj_vJazjYuCp_Qc"
+  provider: pypi
+  user: __token__
+  password:
+    secure: biGPGtfbMUJu0mJQQwak9aJc9fx0BrIcHSC78qR24WjiOZMcjrw+MLVUx8QNdd32r7VNQat23kNqILeo3oiD6YdHxA1EsJfKp8M0SPDt+WtSugLyxdGSiZhyqAz8khH+2WLS2uaej/pk0j6iu3MVWjsUyzXmtsUJSpfZ6fmHaPArODLXWYLa7srNIZQLGeP5M+Ky3ba4DZ1VLZjxFUd130KnckKJZWVAhUHHJgS6ULCUGBKbgDr7bEIvYX1KJR0Ei9Owb3QvHNdIgcg1+nXoshOohRbnCaLMBp2kyOQgzW3Ma6tqTEitg6pG0Ue/DKU78nLjZg5ewzGdCz/atPEcyIJPlYKVTV/eS2ruK6vmF+DvfBVnvKgKFozql3jpXRQobtbYlKSu/L3gGgvVUmgNRpuNWqkFA+ks68V3eoBLtpdU8CxoekjcC5Xek6fyOSK8HQeiYOFPx4Y327ok4nIuFUC6fJoHoybqT+aVgdeeOVhv3sva0ginVfikDzwH+Q2gvfpYxKoYBWwmy5X08lhMAdsGi7i22OXH2ohEj3o+x99wut3CBayKDtVlayOSDl1/NTVN3sNCIo17tkTKE5MJ6bZYC8sGzpDtFGmxb2FpNOAhCe6nQTbyWX/KxeZWX38h7q+epSE1a3okOjMrBveDritRKm/9TrKWf+SUGbUHE8U=
